@@ -146,28 +146,31 @@ def column_names_flux(df):
     # print(Ufric,ZL,RH,WS,PA,TA)
     # Ufric_min=df[Ufric].isna().sum().idxmin()
     if (len(MO_L)!=0) & (len(RH)!=0):
-        df=df.rename(columns={df[Ufric].isna().sum().idxmin():"UFRIC_st", \
-                              df[ZL].isna().sum().idxmin():"ZL_st",\
-                              df[RH].isna().sum().idxmin():"RH_st",\
-                              df[WS].isna().sum().idxmin():"WS_st",\
-                              df[PA].isna().sum().idxmin():"PA_st",\
-                              df[TA].isna().sum().idxmin():"TA_st",\
-                              df[MO_L].isna().sum().idxmin():"MO_L_st"})
+        df=df.rename(columns={str(df[Ufric].isna().sum().idxmin()):"UFRIC_st", \
+                              str(df[ZL].isna().sum().idxmin()):"ZL_st",\
+                              str(df[RH].isna().sum().idxmin()):"RH_st",\
+                              str(df[WS].isna().sum().idxmin()):"WS_st",\
+                              str(df[PA].isna().sum().idxmin()):"PA_st",\
+                              str(df[TA].isna().sum().idxmin()):"TA_st",\
+                              str(df[MO_L].isna().sum().idxmin()):"MO_L_st",
+                              str(df[WS].isna().sum().idxmin()):"WS_st"})
         # print(df[Ufric].isna().sum().idxmin())
     elif len(RH)==0:
-        df=df.rename(columns={df[Ufric].isna().sum().idxmin():"UFRIC_st", \
-                        df[ZL].isna().sum().idxmin():"ZL_st",\
-                        df[MO_L].isna().sum().idxmin():"MO_L_st",\
-                        df[WS].isna().sum().idxmin():"WS_st",\
-                        df[PA].isna().sum().idxmin():"PA_st",\
-                        df[TA].isna().sum().idxmin():"TA_st"})
+        df=df.rename(columns={str(df[Ufric].isna().sum().idxmin()):"UFRIC_st", \
+                        str(df[ZL].isna().sum().idxmin()):"ZL_st",\
+                        str(df[MO_L].isna().sum().idxmin()):"MO_L_st",\
+                        str(df[WS].isna().sum().idxmin()):"WS_st",\
+                        str(df[PA].isna().sum().idxmin()):"PA_st",\
+                        str(df[TA].isna().sum().idxmin()):"TA_st",
+                        str(df[WS].isna().sum().idxmin()):"WS_st"})
     else:
-        df=df.rename(columns={df[Ufric].isna().sum().idxmin():"UFRIC_st", \
-                              df[ZL].isna().sum().idxmin():"ZL_st",\
-                              df[RH].isna().sum().idxmin():"RH_st",\
-                              df[WS].isna().sum().idxmin():"WS_st",\
-                              df[PA].isna().sum().idxmin():"PA_st",\
-                              df[TA].isna().sum().idxmin():"TA_st"})
+        df=df.rename(columns={str(df[Ufric].isna().sum().idxmin()):"UFRIC_st", \
+                              str(df[ZL].isna().sum().idxmin()):"ZL_st",\
+                              str(df[RH].isna().sum().idxmin()):"RH_st",\
+                              str(df[WS].isna().sum().idxmin()):"WS_st",\
+                              str(df[PA].isna().sum().idxmin()):"PA_st",\
+                              str(df[TA].isna().sum().idxmin()):"TA_st",
+                              str(df[WS].isna().sum().idxmin()):"WS_st"})
 
 
     return df
@@ -199,7 +202,7 @@ def merge_inst_sebal(flux_data,sebal_data,filename_flux,filename_sebal,out_dir):
 bif_files,bif_filenames=read_bif(dir_bif)
 flux_files,flux_filenames=read_flux(dir_flux)
 data_insitu=[column_names_flux(file) for file in flux_files]
-data_insitu=add_state(flux_files,bif_files,flux_filenames,bif_filenames)
+data_insitu=add_state(data_insitu,bif_files,flux_filenames,bif_filenames)
 data_insitu=[convert_timezone_gmt(file,file["State"].iloc[0]) for file in data_insitu]
 # data_sebal,sebal_filenames=read_sebal(dir_sebal) # Concatenating the sebal outputs
 data_sebal,sebal_filenames=read_sebal(out_dir_sebal)
@@ -207,21 +210,15 @@ data_sebal=[column_names_sebal(file) for file in data_sebal]
 merged_dir="D:\\Backup\\Rouhin_Lenovo\\US_project\\Untitled_Folder\\Data\\Inst_project\\dT_merged\\"
 merged_files=merge_inst_sebal(data_insitu,data_sebal,flux_filenames,sebal_filenames,merged_dir)
 
-
-#%%
-
 #%%
 [i.columns.tolist() for i in merged_files if i["Name"].iloc[0]=="US-Var"]
 #%%
-for i in range(len(flux_files)):
-    print(i)
-    # print(merged_files[i]["MO_LENGTH"])
-    column_names_flux(flux_files[i])
-# merged_files[2].columns.tolist()
-# column_names_flux(flux_files[26])
-# flux_files[26].columns.tolist()
 #%%
-for i in range(len(merged_files)):
-    print(merged_files[i].shape)
-merged_files[0]
+# for i in range(len(merged_files)):
+#     print(merged_files[i].shape)
+merged_files[0].columns.tolist()
+# data_insitu=[column_names_flux(file) for file in flux_files]
+
+# %%
+data_insitu[0].columns.tolist()
 # %%
