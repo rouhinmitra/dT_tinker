@@ -45,6 +45,8 @@ def calculate_dt(df):
         df["rahobs"]=(df["phi_v"]/df["phi_m"])*(df["WS_st"]/(df["UFRIC_st"]**2))+(6.26*(df["UFRIC_st"]**(-2/3)))
         df["dT_obs"]=df["H_inst_af"]*df["rahobs"]/(1004*df["rho"])
         print("True")
+    df=df[(df["dT_obs"]>=0) & (df["dT_obs"]<=30) ]
+    df=df[df["rah"]<=500]
     # df["H_calc"]=df["rho"]*1004*df["dT_obs"]/(df["rah"]*2)
     return df
 
@@ -61,7 +63,7 @@ def get_spatial_dT(list_of_files,out_dir):
     """
     all_points=pd.concat(list_of_files)
     all_points=all_points[(all_points["dT_obs"].notna()) & (all_points["dT"].notna())]
-    all_points=all_points[all_points["dT_obs"]>=0]
+    all_points=all_points[(all_points["dT_obs"]>=0) & (all_points["dT_obs"]<=30)  ]
     all_points=all_points[all_points["rah"]<=500]
 
     all_points["rah"].hist()
@@ -91,4 +93,57 @@ for i in station_list:
         print(i.Name.iloc[0])
 # %%
 station_list[0].columns.tolist()
-temp[700][["id",'latitude.1','longitude.1',"dT_obs","dT","T_LST_DEM","hot_pixel_temp","rah","rahobs","constant","constant_1","Veg"]]
+# temp[750][["Name",'latitude.1','longitude.1',"dT_obs","dT","Hinst","H_inst_af","rah","rahobs","constant","constant_1","Veg"]]
+#%%
+#%% Boxplots of errors per station 
+
+import pandas as pd
+
+# Assume station_list is already defined and populated
+all_data = pd.concat(station_list)
+all_data["error_dT"] = all_data["dT"] - all_data["dT_obs"]
+all_data["error_H"] = all_data["Hinst"] - all_data["H_inst_af"]
+all_data["error_rah"] = all_data["rah"] - all_data["rahobs"]
+all_data["error_LE"] = all_data["LEinst"] - all_data["LE_inst_af"]
+print(all_data["error_dT"].describe())
+def plot_boxplots(df,new_col,label):
+    df.sort_values(by=['Veg', 'Name'], inplace=True)
+    landcovers = df['Veg'].unique()
+
+    plot_data = []
+    plot_labels = []
+
+    for landcover in landcovers:
+        landcover_data = all_data[all_data["Veg"] == landcover]
+        stations = landcover_data["Name"].unique()
+        for station in stations:
+            station_errors = landcover_data[landcover_data["Name"] == station][new_col]
+            plot_data.append(station_errors)
+            plot_labels.append(f'{landcover} - {station}')
+
+    # Plotting boxplots
+    plt.figure(figsize=(25, 10))
+    plt.boxplot(plot_data, labels=plot_labels, patch_artist=True)
+    plt.axhline(y=0, color='r', linestyle='--', linewidth=2)
+
+    # Customizing the plot
+    plt.xlabel("Name", fontsize=14)
+    plt.ylabel('Error of'+label, fontsize=14)
+    plt.title('Error Distribution', fontsize=16)
+    plt.xticks(rotation=90, fontsize=12)
+    plt.yticks(fontsize=12)
+    # plt.ylim(-10,10)
+    plt.ylim(-100,100)
+
+    # Display the plot
+    plt.tight_layout()
+    plt.show()
+# plot_boxplots(all_data,"error_dT","LWin_ang")
+# plot_boxplots(all_data,"error_H","Hinst")
+plot_boxplots(all_data,"error_rah","rah")
+
+# plot_boxplots(all_data,"error_lwin","LWin_sebal")
+# %%
+plt.plot(all_data["T_LST_DEM"],all_data["dT_obs"],"o")
+# %%
+all_data[all_data["dT_obs"]>20]["T_LST_DEM"]-273.15
