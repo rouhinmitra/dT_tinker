@@ -49,6 +49,8 @@ def add_state(main_list,metadata_list,file_name_main,file_name_metadata):
         for metadata_index in range(len(metadata_list)):
             if file_name_main[main_list_index]==file_name_metadata[metadata_index]:
                 main_list[main_list_index]["State"]=metadata_list[metadata_index][metadata_list[metadata_index]["VARIABLE_GROUP"]=="GRP_STATE"]["DATAVALUE"].iloc[0]
+                main_list[main_list_index]["Veg"]=metadata_list[metadata_index][metadata_list[metadata_index]["VARIABLE_GROUP"]=="GRP_IGBP"]["DATAVALUE"].iloc[0]
+                # main_list[main_list_index]["Climate"]=metadata_list[metadata_index][metadata_list[metadata_index]["VARIABLE"]=="CLIMATE_KOEPPEN"]["DATAVALUE"].iloc[0]
                 main_list[main_list_index]["Name"]=file_name_main[main_list_index]
                 # main_list[main_list_index]["Dae"]=pd.to_datetime(main_list[main_list_index]["TIMESTAMP_START"])
 

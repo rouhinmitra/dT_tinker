@@ -49,7 +49,8 @@ def calculate_dt(df,h_col,ta_col,ws_col,length=False):
         df["rahobs"]=(df["phi_v"]/df["phi_m"])*(df[ws_col]/(df["USTAR"]**2))+(6.26*(df["USTAR"]**(-2/3)))
         df["dT_obs"]=df[h_col]*df["rahobs"]/(1004*df["rho"])
         print("True")
-    df["H_calc"]=df["rho"]*1004*df["dT_obs"]/(df["rah"]*2)
+    df["rho_model"]=df["Hinst"]*df["rah"]/(df["dT"]*1004)
+    df["H_calc"]=df["rho_model"]*1004*df["dT_obs"]/(df["rah"]*2)
     return df
 
 
@@ -91,9 +92,9 @@ for index in range(len(dT_list)):
 #%% Plot 3d plots 
 def plot_cbar(df,index):
     cm = plt.cm.get_cmap('RdYlBu')
-    xy = df["cold_pixel_temp"]
+    xy = df["NDVI"]
     z = xy
-    sc = plt.scatter(df["rahobs"], df["rah"], c=z, vmin=270, vmax=300, s=35, cmap=cm)
+    sc = plt.scatter(df["rahobs"], df["rah"], c=z, vmin=0, vmax=1, s=35, cmap=cm)
 
     plt.plot(np.arange(0,50,10), np.arange(0,50,10), linestyle='--', color='gray', label='1:1 Line')
 
@@ -158,11 +159,11 @@ def plot_cbar(df,index):
     plt.xlim(0,20)
     plt.title(str(index))
     plt.show()
-plot_cbar(dT_list[0],dT_list[0]["Veg"].iloc[0])
+# plot_cbar(dT_list[0],dT_list[0]["Veg"].iloc[0])
 # dT_list[0].columns.tolist()
 for i in range(len(dT_list)):
-    # plot_cbar(dT_list[i],dT_list[i]["Veg"].iloc[0])
-    print(dT_list[i]["mae_dT"].corr(dT_list[i]["NDVI"]))
+    plot_cbar(dT_list[i],dT_list[i]["Veg"].iloc[0])
+    # print(dT_list[i]["mae_dT"].corr(dT_list[i]["NDVI"]))
 
 #%%
 # Merge sentinel 1 to the dataframe 
@@ -235,3 +236,5 @@ def plot_radar(df,index):
     plt.show()
 for i in range(len(sen1ls)):
     plot_radar(sen1ls[i],sen1ls[i]["Veg"].iloc[0])
+
+# %%

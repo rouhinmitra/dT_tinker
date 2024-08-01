@@ -35,4 +35,3 @@ for st_index in range(34,st.shape[0]):
     sebal.call_et_func(st.Long.iloc[st_index],st.Lat.iloc[st_index],st["start_date"].iloc[st_index],\
                    st["end_date"].iloc[st_index],30,st["Site ID"].iloc[st_index],"D:\\Backup\\Rouhin_Lenovo\\US_project\\Untitled_Folder\\Data\\Inst_project\\dT_sebal\\")
 # st["Site ID"].iloc[0]
-# %%
