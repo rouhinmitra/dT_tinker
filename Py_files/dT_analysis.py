@@ -56,7 +56,7 @@ def regression_fixedcoldpixel(df):
     # Transform the data so the first point is at the origin
     ts_transformed = df['T_LST_DEM'] - ts_cold
     dt_transformed = df['dT_obs'] - dt_cold
-\
+
     # Fit the line y = mx to the transformed data (excluding the first point)
     model = LinearRegression(fit_intercept=False)  # No intercept, line passes through the origin
     model.fit(ts_transformed[1:].values.reshape(-1, 1), dt_transformed[1:].values)
@@ -213,37 +213,7 @@ def error_analysis_by_lancover(list_of_files,suffix):
         plt.show()
 
     return 
-#%%
-dir="D:\\Backup\\Rouhin_Lenovo\\US_project\\Untitled_Folder\\Data\\Inst_project\\dT_spatialdata\\"
-dt_data=read_files(dir)
-dt_cold=[regression_fixedcoldpixel(df) for df in dt_data]
-# dt_exp=[regression_exp(df) for df in dt_data]
-
-# %%
-a=regression_fixedcoldpixel(dt_data[650])
-a[["Name","dT_obs","dT","dT_coldpixelregress","Hinst","H_coldpixelregress","H_inst_af","LEinst","LE_coldpixelregress","LE_inst_af","rah","rahobs","Rn","NETRAD","constant","m_coldpixelregress","Veg"]]
-# a[["Name","dT_obs","dT","dT_coldpixelregress","Hinst","H_coldpixelregress","H_inst_af","LEinst","LE_coldpixelregress","LE_inst_af","rah","rahobs","Rn","NETRAD","constant","m_coldpixelregress","Veg"]]
-
-# a
-# a.column
-
-#%%
-error_analysis_by_lancover(dt_cold,"coldpixelregress")
-# error_analysis_by_station(dt_cold,"coldpixelregress")
-
-# error_analysis_by_lancover(dt_exp,"exp")
-
-# dt_calculate[0]
-# %%
-a=regression_all(dt_data[560])
-a
-a[["Name","dT_obs","dT","dT_allregress","Hinst","H_allregress","H_inst_af","LEinst","LE_allregress","LE_inst_af","rah","rahobs","Rn","NETRAD","constant","m_allregress","Veg"]]
-
-# %%
-a=regression_exp(dt_data[0])
-a[["Name","dT_obs","dT","dT_exp","T_LST_DEM","hot_pixel_temp","Hinst","H_exp","H_inst_af","LEinst","LE_exp","LE_inst_af","rah","rahobs","Rn","NETRAD","constant","Veg"]]
-
-# %%
+  
 def error_analysis_by_station(list_of_files,suffix):
     """
     Make scatter plots of measured LEinst af wrt LE sebal and LE cold pixel regress 
@@ -316,6 +286,25 @@ def error_analysis_by_station(list_of_files,suffix):
         plt.show()
 
     return 
+
+#%%
+dir="D:\\Backup\\Rouhin_Lenovo\\US_project\\Untitled_Folder\\Data\\Inst_project\\dT_spatialdata\\"
+dt_data=read_files(dir)
+dt_cold=[regression_fixedcoldpixel(df) for df in dt_data]
+# dt_exp=[regression_exp(df) for df in dt_data]
+
 # %%
-# pd.concat(dt_data)["LAI"].hist(bins=100)
+a=regression_fixedcoldpixel(dt_data[650])
+a[["Name","dT_obs","dT","dT_coldpixelregress","Hinst","H_coldpixelregress","H_inst_af","LEinst","LE_coldpixelregress","LE_inst_af","rah","rahobs","Rn","NETRAD","constant","m_coldpixelregress","Veg"]]
+a=regression_all(dt_data[560])
+a[["Name","dT_obs","dT","dT_allregress","Hinst","H_allregress","H_inst_af","LEinst","LE_allregress","LE_inst_af","rah","rahobs","Rn","NETRAD","constant","m_allregress","Veg"]]
+a=regression_exp(dt_data[0])
+a[["Name","dT_obs","dT","dT_exp","T_LST_DEM","hot_pixel_temp","Hinst","H_exp","H_inst_af","LEinst","LE_exp","LE_inst_af","rah","rahobs","Rn","NETRAD","constant","Veg"]]
+
+#%%
+error_analysis_by_lancover(dt_cold,"coldpixelregress")
+# error_analysis_by_station(dt_cold,"coldpixelregress")
+# error_analysis_by_lancover(dt_exp,"exp")
+# dt_calculate[0]
+# %%
 dt_data[0].columns.tolist()
