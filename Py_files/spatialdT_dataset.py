@@ -82,6 +82,8 @@ def get_spatial_dT(list_of_files,out_dir):
 merged_dir="D:\\Backup\\Rouhin_Lenovo\\US_project\\Untitled_Folder\\Data\\Inst_project\\dT_merged\\"
 station_list,station_names=read_files(merged_dir)
 station_list=[calculate_dt(file) for file in station_list]
+for i in range(len(station_list)):
+    station_list[i].to_csv("D:\\Backup\\Rouhin_Lenovo\\US_project\\Untitled_Folder\\Data\\Inst_project\\dT_calculated\\"+station_names[i]+".csv")
 export_dir="D:\\Backup\\Rouhin_Lenovo\\US_project\\Untitled_Folder\\Data\\Inst_project\\dT_spatialdata\\"
 temp=get_spatial_dT(station_list,export_dir)
 

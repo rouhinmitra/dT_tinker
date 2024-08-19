@@ -201,16 +201,13 @@ def error_analysis_by_lancover(list_of_files,suffix):
         plt.legend()
         plt.show()
         group["rah_error"]=group["rah"]-group["rahobs"]
-        corr_matrix=group[["rah_error","rahobs","NDVI_model","T_LST_DEM","LAI","WS_st","TA_st","MO_L_st","ZL_st"]]
+        corr_matrix=group[["rah_error","rahobs","NDVI_model","T_LST_DEM","LAI","WS_st","TA_st","MO_L_st","ZL_st","dT_obs"]]
         sns.heatmap(corr_matrix.corr());
         print("rah vs LST",group["rahobs"].corr(group["T_LST_DEM"]))
         print("rah vs WS",group["rahobs"].corr(group["WS_st"]))
         print("rah vs LAI",group["rahobs"].corr(group["LAI"]))
         print("rah vs Z/L",group["rahobs"].corr(group["ZL_st"]))
         plt.figure()
-
-        plt.plot(group["ZL_st"],group["rahobs"],"o")
-        plt.show()
 
     return 
   
@@ -308,3 +305,5 @@ error_analysis_by_lancover(dt_cold,"coldpixelregress")
 # dt_calculate[0]
 # %%
 dt_data[0].columns.tolist()
+
+# %%
